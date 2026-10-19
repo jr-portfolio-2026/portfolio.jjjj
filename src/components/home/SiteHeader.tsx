@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
 import { home } from "@/content/home";
 import { site } from "@/content/site";
+import { Mark } from "@/components/ui/Mark";
 
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
@@ -22,11 +23,11 @@ export function SiteHeader() {
         <div className="mx-auto flex h-16 max-w-[90rem] items-center justify-between px-6 md:px-10">
           <a
             href="#top"
-            className="inline-flex h-11 items-center font-serif text-2xl text-relief"
+            className="inline-flex h-11 items-center text-2xl text-relief"
             aria-label={`${site.name}, back to top`}
             onClick={() => setOpen(false)}
           >
-            {site.initials}
+            <Mark />
           </a>
 
           <nav className="hidden items-center gap-7 lg:flex" aria-label="Primary navigation">
@@ -41,7 +42,7 @@ export function SiteHeader() {
             ))}
           </nav>
 
-          <span className="meta-soft hidden lg:block">Portfolio / {site.year}</span>
+          <span className="meta-soft hidden lg:block">{site.portfolioLabel} / {site.year}</span>
 
           <button
             type="button"

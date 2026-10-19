@@ -5,7 +5,7 @@ import { home } from "@/content/home";
 import { site } from "@/content/site";
 import { ease } from "./motion";
 
-export function Hero() {
+export function Hero({ ready }: { ready: boolean }) {
   const h = home.hero;
   return (
     <section id="top" className="relative flex min-h-[92svh] items-end px-6 pb-12 pt-28 md:px-10 md:pb-20">
@@ -16,8 +16,8 @@ export function Hero() {
         </div>
 
         <div className="grid items-end gap-10 lg:grid-cols-[1.2fr_.8fr] lg:gap-12">
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1.1, ease }}>
-            <p className="meta-label mb-6 text-[oklch(0.5_0.09_80)] md:mb-7">{site.name}</p>
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={ready ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }} transition={{ duration: 1.1, ease }}>
+            <p className="meta-label mb-6 text-gold-ink md:mb-7">{site.name}</p>
             <h1 className="max-w-5xl font-serif text-[clamp(3.1rem,7vw,7.25rem)] leading-[.94] font-light text-relief">
               {h.headline.before}
               <em className="font-normal text-navy">{h.headline.emphasis}</em>
@@ -25,8 +25,9 @@ export function Hero() {
             </h1>
           </motion.div>
 
-          <motion.div className="lg:pb-2" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.55, duration: 1 }}>
+          <motion.div className="lg:pb-2" initial={{ opacity: 0 }} animate={{ opacity: ready ? 1 : 0 }} transition={{ delay: 0.55, duration: 1 }}>
             <p className="font-serif text-2xl leading-snug text-navy-deep">{h.lede}</p>
+            <p className="meta-label mt-5 text-gold-ink">{home.tagline.first} {home.tagline.second}</p>
             <p className="mt-5 max-w-lg text-sm leading-7 text-navy-deep/75">{h.sub}</p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Button asChild className="h-12 rounded-none px-7">

@@ -1,45 +1,36 @@
-import { HeadContent, Outlet, Scripts, createRootRoute } from "@tanstack/react-router";
-import type { ReactNode } from "react";
-import appCss from "../styles.css?url";
+import { Link, Outlet, createRootRoute, useMatches } from "@tanstack/react-router";
+import { useEffect } from "react";
+import { applyHead } from "@/lib/head";
 
 export const Route = createRootRoute({
-  head: () => ({
-    meta: [
-      { charSet: "utf-8" },
-      { name: "viewport", content: "width=device-width, initial-scale=1, viewport-fit=cover" },
-    ],
-    links: [
-      { rel: "stylesheet", href: appCss },
-      { rel: "icon", href: `${import.meta.env.BASE_URL}favicon.ico`, type: "image/x-icon" },
-    ],
-  }),
-  shellComponent: RootShell,
-  component: () => <Outlet />,
-  notFoundComponent: () => (
-    <main className="grid min-h-screen place-items-center px-6 text-center">
-      <div>
-        <p className="meta-label">404</p>
-        <h1 className="mt-4 font-serif text-5xl">This page does not exist.</h1>
-        <a href={import.meta.env.BASE_URL} className="meta-label mt-8 inline-block border-b border-gold pb-1">Back to the portfolio</a>
-      </div>
-    </main>
-  ),
+  component: RootLayout,
+  notFoundComponent: NotFound,
 });
 
-function RootShell({ children }: { children: ReactNode }) {
+function RootLayout() {
+  const matches = useMatches();
+  // Keeps <title>, description, canonical and Open Graph in step with the current route.
+  useEffect(() => {
+    const meta = matches.flatMap((m) => (m.meta ?? []).filter(Boolean)) as Record<string, string>[];
+    const links = matches.flatMap((m) => (m.links ?? []).filter(Boolean)) as Record<string, string>[];
+    applyHead(meta, links);
+  }, [matches]);
+  return <Outlet />;
+}
+
+function NotFound() {
+  useEffect(() => {
+    document.title = "Page not found";
+  }, []);
   return (
-    <html lang="en">
-      <head>
-        <HeadContent />
-        {/* Prerendered sections start hidden for the reveal animation; without JS they must still be readable. */}
-        <noscript>
-          <style>{`[style*="opacity:0"],[style*="opacity: 0"]{opacity:1!important;transform:none!important;filter:none!important}`}</style>
-        </noscript>
-      </head>
-      <body>
-        {children}
-        <Scripts />
-      </body>
-    </html>
+    <main id="main" className="paper-surface grid min-h-screen place-items-center px-6 text-center">
+      <div>
+        <p className="meta-label">404</p>
+        <h1 className="mt-4 font-serif text-5xl font-light text-relief">This page does not exist.</h1>
+        <Link to="/" className="meta-label mt-8 inline-flex min-h-11 items-center border-b border-gold pb-1">
+          Back to the portfolio
+        </Link>
+      </div>
+    </main>
   );
 }

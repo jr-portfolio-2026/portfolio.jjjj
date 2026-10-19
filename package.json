@@ -5,11 +5,13 @@
   "version": "0.1.0",
   "scripts": {
     "dev": "vite dev",
-    "build": "vite build",
+    "build": "tsc --noEmit && vite build && vite build --ssr src/entry-server.tsx --outDir dist-ssr && node scripts/prerender.mjs",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
     "check:content": "node scripts/check-placeholders.mjs",
-    "build:release": "node scripts/check-placeholders.mjs --strict && vite build"
+    "check:dist": "node scripts/verify-dist.mjs",
+    "build:release": "node scripts/check-placeholders.mjs --strict && npm run build",
+    "test:browser": "node scripts/browser-check.mjs"
   },
   "dependencies": {
     "@fontsource-variable/manrope": "^5.2.0",
@@ -17,7 +19,6 @@
     "@radix-ui/react-slot": "^1.2.4",
     "@tailwindcss/vite": "^4.2.1",
     "@tanstack/react-router": "1.170.18",
-    "@tanstack/react-start": "1.168.32",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "lucide-react": "^0.575.0",
@@ -34,6 +35,7 @@
     "@vitejs/plugin-react": "^5.2.0",
     "prettier": "^3.7.3",
     "typescript": "^5.8.3",
-    "vite": "8.1.5"
+    "vite": "8.1.5",
+    "@tanstack/router-plugin": "1.168.23"
   }
 }

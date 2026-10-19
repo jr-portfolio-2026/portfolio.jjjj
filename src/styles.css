@@ -47,6 +47,12 @@
   --color-forest: var(--forest);
   --color-ivory: var(--ivory);
   --color-ivory-deep: var(--ivory-deep);
+  --color-gold-ink: var(--gold-ink);
+  --color-gold-soft: var(--gold-soft);
+  --color-signal: var(--signal);
+  --color-paper: var(--paper);
+  --color-ink: var(--ink);
+  --color-stone: var(--stone);
   --color-cobalt: var(--cobalt);
   --color-cobalt-deep: var(--cobalt-deep);
   --color-cobalt-foreground: var(--cobalt-foreground);
@@ -69,23 +75,38 @@
 :root {
   --radius: 0.125rem;
 
-  --ivory: oklch(0.975 0.006 85);
-  --ivory-deep: oklch(0.945 0.009 80);
-  --navy: oklch(0.33 0.085 258); /* #153765 */
-  --navy-deep: oklch(0.225 0.06 255); /* #0b1f37 */
-  --mist: oklch(0.87 0.03 210); /* #c8dce3 */
-  --gold: oklch(0.64 0.085 80); /* #ab894b */
-  --forest: oklch(0.33 0.045 170); /* #193c35 */
-  --cobalt: oklch(0.32 0.16 266); /* #002679 */
-  --cobalt-deep: oklch(0.22 0.12 265); /* #001442 */
-  --cobalt-foreground: oklch(0.96 0.012 230);
+  /* ── Portfolio II palette: the only place raw colour values are written ── */
+  --paper: #f7f4ed;
+  --paper-light: #fcfbf8;
+  --midnight: #0b1f37;
+  --institutional: #153765;
+  --deep-blue: #1e345c;
+  --signal: #142c9b;
+  --ink: #161a1d;
+  --mist-hex: #c8dce3;
+  --stone: #dad1c8;
+  --gold-hex: #ab894b;
+  --forest-hex: #193c35;
 
+  /* ── Semantic roles (components use these) ── */
+  --ivory: var(--paper);
+  --ivory-deep: color-mix(in oklch, var(--paper) 90%, var(--stone));
+  --navy: var(--institutional);
+  --navy-deep: var(--midnight);
+  --mist: var(--mist-hex);
+  --gold: var(--gold-hex);
+  --forest: var(--forest-hex);
+  --gold-ink: color-mix(in oklch, var(--gold-hex) 62%, var(--ink)); /* gold as text on paper (AA) */
+  --gold-soft: color-mix(in oklch, var(--gold-hex) 60%, white); /* gold as text on navy */
+  --cobalt: var(--signal);
+  --cobalt-deep: color-mix(in oklch, var(--signal) 55%, var(--midnight));
+  --cobalt-foreground: var(--paper-light);
 
   --background: var(--ivory);
-  --foreground: var(--navy-deep);
-  --card: oklch(0.985 0.004 85);
+  --foreground: var(--ink);
+  --card: var(--paper-light);
   --card-foreground: var(--navy-deep);
-  --popover: oklch(0.985 0.004 85);
+  --popover: var(--paper-light);
   --popover-foreground: var(--navy-deep);
   --primary: var(--navy);
   --primary-foreground: var(--ivory);
@@ -97,8 +118,8 @@
   --accent-foreground: var(--navy-deep);
   --destructive: oklch(0.55 0.18 25);
   --destructive-foreground: var(--ivory);
-  --border: oklch(0.33 0.085 258 / 14%);
-  --input: oklch(0.33 0.085 258 / 18%);
+  --border: color-mix(in oklch, var(--institutional) 14%, transparent);
+  --input: color-mix(in oklch, var(--institutional) 18%, transparent);
   --ring: var(--gold);
 
   --shadow-relief:
@@ -375,7 +396,33 @@
   box-shadow: 0 22px 60px -38px oklch(0.22 0.12 265 / 55%);
 }
 
+/* Route change: a blue panel slides away. Pure CSS, so it also ends without JavaScript. */
+@keyframes route-wipe {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(102%, 0, 0); }
+}
+
+@utility route-wipe {
+  animation: route-wipe 0.85s var(--ease-breath) 0.12s both;
+}
+
+@utility skip-link {
+  position: absolute;
+  left: 1rem;
+  top: -4rem;
+  z-index: 100;
+  padding: 0.75rem 1rem;
+  background: var(--navy-deep);
+  color: var(--paper-light);
+  font-size: 0.75rem;
+  &:focus { top: 1rem; }
+}
+
 @layer base {
+  :focus-visible {
+    outline: 2px solid var(--gold);
+    outline-offset: 3px;
+  }
 
   * {
     border-color: var(--color-border);
